@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class TankManager
 {
-    
+
     public Color m_PlayerColor;
     public Transform m_SpawnPoint;
     [HideInInspector] public int m_PlayerNumber;
@@ -82,4 +82,28 @@ public class TankManager
         m_Instance.SetActive(true);
     }
 
+    public void activateMovementPowerUp(int speed, int turnRate)
+    {
+        // 6, 90
+        m_Movement.m_Speed += speed;
+        m_Movement.m_TurnSpeed += turnRate;
+    }
+
+    public void removeMovementPowerUp(int speed, int turnRate)
+    {
+        m_Movement.m_Speed -= speed;
+        m_Movement.m_TurnSpeed -= turnRate;
+    }
+
+    public void activateGunPowerUp(float fireRate)
+    {
+        // 0.5
+        m_Shooting.m_FireRate -= fireRate;
+    }
+
+    public void removeGunPowerUp(float fireRate)
+    {
+        // 0.5
+        m_Shooting.m_FireRate += fireRate;
+    }
 }

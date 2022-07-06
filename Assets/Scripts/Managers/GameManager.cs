@@ -8,24 +8,31 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int m_NumRoundsToWin = 5;            
-    public float m_StartDelay = 3f;             
-    public float m_EndDelay = 3f;               
-    public CameraControl m_CameraControl;       
-    public Text m_MessageText;                  
+    // public int m_NumRoundsToWin = 1;
+    public float m_StartDelay = 3f;
+    public float m_EndDelay = 3f;
+    public CameraControl m_CameraControl;
+    public Text m_MessageText;
+    // public Text m_StartScreenText;
     public GameObject[] m_TankPrefabs;
-    public TankManager[] m_Tanks;               
+    public TankManager[] m_Tanks;
     public List<Transform> wayPointsForAI;
+    public GameObject gunIcon;
+    public GameObject runIcon;
 
-    private int m_RoundNumber;                  
-    private WaitForSeconds m_StartWait;         
-    private WaitForSeconds m_EndWait;           
-    private TankManager m_RoundWinner;          
-    private TankManager m_GameWinner;           
+    private int m_RoundNumber;
+    private WaitForSeconds m_StartWait;
+    private WaitForSeconds m_EndWait;
+    private TankManager m_RoundWinner;
+    private TankManager m_GameWinner;
+
+    public UIConstants uIConstants;
 
 
     private void Start()
     {
+        Debug.Log("Loading");
+        uIConstants.startMenuShown = true;
         m_StartWait = new WaitForSeconds(m_StartDelay);
         m_EndWait = new WaitForSeconds(m_EndDelay);
 
@@ -66,12 +73,25 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GameLoop()
     {
+        yield return StartCoroutine(LoadingScreen());
         yield return StartCoroutine(RoundStarting());
         yield return StartCoroutine(RoundPlaying());
         yield return StartCoroutine(RoundEnding());
 
         if (m_GameWinner != null) SceneManager.LoadScene(0);
-        else StartCoroutine(GameLoop());
+        else
+        {
+            // uIConstants.startMenuShown = true;
+            StartCoroutine(GameLoop());
+        }
+    }
+
+    private IEnumerator LoadingScreen()
+    {
+        runIcon.SetActive(true);
+        gunIcon.SetActive(true);
+        // Stay here until startMenuShown is false
+        while (uIConstants.startMenuShown) yield return null;
     }
 
 
@@ -95,7 +115,36 @@ public class GameManager : MonoBehaviour
 
         m_MessageText.text = string.Empty;
 
-        while (!OneTankLeft()) yield return null;
+        while (!OneTankLeft())
+        {
+            if (Input.GetKeyDown("q") && runIcon.activeSelf)
+            {
+                runIcon.SetActive(false);
+                m_Tanks[0].activateMovementPowerUp(6, 90);
+                StartCoroutine(removeMovementEffect(6, 90));
+            }
+
+            if (Input.GetKeyDown("e") && gunIcon.activeSelf)
+            {
+                gunIcon.SetActive(false);
+                m_Tanks[0].activateGunPowerUp(0.6f);
+                StartCoroutine(removeGunEffect(0.6f));
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator removeMovementEffect(int speed, int turnRate)
+    {
+        yield return new WaitForSeconds(5.0f);
+        m_Tanks[0].removeMovementPowerUp(speed, turnRate);
+    }
+
+    private IEnumerator removeGunEffect(float fireRate)
+    {
+        yield return new WaitForSeconds(5.0f);
+        m_Tanks[0].removeGunPowerUp(fireRate);
     }
 
 
@@ -144,7 +193,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < m_Tanks.Length; i++)
         {
-            if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
+            if (m_Tanks[i].m_Wins == uIConstants.m_NumRoundsToWin)
                 return m_Tanks[i];
         }
 

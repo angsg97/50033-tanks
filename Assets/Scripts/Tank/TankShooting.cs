@@ -13,6 +13,7 @@ public class TankShooting : MonoBehaviour
     public float m_MinLaunchForce = 15f;
     public float m_MaxLaunchForce = 30f;
     public float m_MaxChargeTime = 0.75f;
+    public float m_FireRate = 1.0f;
 
     private string m_FireButton;
     private float m_CurrentLaunchForce;
@@ -41,7 +42,7 @@ public class TankShooting : MonoBehaviour
         if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
         {
             m_CurrentLaunchForce = m_MaxLaunchForce;
-            Fire(m_CurrentLaunchForce, 1);
+            Fire(m_CurrentLaunchForce, m_FireRate);
         }
         else if (Input.GetButtonDown(m_FireButton))
         {
@@ -58,7 +59,7 @@ public class TankShooting : MonoBehaviour
         }
         else if (Input.GetButtonUp(m_FireButton) && !m_Fired)
         {
-            Fire(m_CurrentLaunchForce, 1);
+            Fire(m_CurrentLaunchForce, m_FireRate);
         }
     }
 
@@ -79,5 +80,5 @@ public class TankShooting : MonoBehaviour
 
         m_CurrentLaunchForce = m_MinLaunchForce;
     }
-    
+
 }
