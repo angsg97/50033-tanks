@@ -11,6 +11,7 @@ public class ChaseAction : Action
 
     private void Chase(StateController controller)
     {
+        controller.uIConstants.redBlurActivated = true;
         controller.navMeshAgent.destination = controller.chaseTarget.position;
         controller.navMeshAgent.isStopped = false;
     }

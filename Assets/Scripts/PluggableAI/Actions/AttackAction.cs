@@ -11,6 +11,7 @@ public class AttackAction : Action
 
     void Attack(StateController controller)
     {
+        controller.uIConstants.redBlurActivated = true;
         RaycastHit hit;
         Vector3 position = controller.eyes.position;
         float radius = controller.enemyStats.lookSphereCastRadius;

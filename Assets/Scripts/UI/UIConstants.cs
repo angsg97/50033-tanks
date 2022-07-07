@@ -6,4 +6,5 @@ public class UIConstants : ScriptableObject
 {
     public bool startMenuShown = true;
     public int m_NumRoundsToWin = 1;
+    public bool redBlurActivated = false;
 }

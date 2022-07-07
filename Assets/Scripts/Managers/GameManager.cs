@@ -27,12 +27,15 @@ public class GameManager : MonoBehaviour
     private TankManager m_GameWinner;
 
     public UIConstants uIConstants;
+    public GameObject redBlurBorder;
 
 
     private void Start()
     {
         Debug.Log("Loading");
         uIConstants.startMenuShown = true;
+        uIConstants.redBlurActivated = false;
+
         m_StartWait = new WaitForSeconds(m_StartDelay);
         m_EndWait = new WaitForSeconds(m_EndDelay);
 
@@ -104,6 +107,7 @@ public class GameManager : MonoBehaviour
 
         m_RoundNumber++;
         m_MessageText.text = $"ROUND {m_RoundNumber}";
+        uIConstants.redBlurActivated = false;
 
         yield return m_StartWait;
     }
@@ -117,6 +121,11 @@ public class GameManager : MonoBehaviour
 
         while (!OneTankLeft())
         {
+            if (redBlurBorder.activeSelf != uIConstants.redBlurActivated)
+            {
+                redBlurBorder.SetActive(uIConstants.redBlurActivated);
+            }
+
             if (Input.GetKeyDown("q") && runIcon.activeSelf)
             {
                 runIcon.SetActive(false);
@@ -150,6 +159,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundEnding()
     {
+
+        uIConstants.redBlurActivated = false;
         DisableTankControl();
 
         m_RoundWinner = null;

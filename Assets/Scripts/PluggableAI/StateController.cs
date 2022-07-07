@@ -10,6 +10,7 @@ public class StateController : MonoBehaviour
     public EnemyStats enemyStats;
     public Transform eyes;
     public State remainState;
+    public UIConstants uIConstants;
 
     [HideInInspector] public NavMeshAgent navMeshAgent;
     [HideInInspector] public TankShooting tankShooting;

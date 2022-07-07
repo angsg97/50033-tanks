@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca88b71fc75bedaada8a45de9944fba4, type: 3}
   m_Name: UIConstants
   m_EditorClassIdentifier: 
-  startMenuShown: 1
+  startMenuShown: 0
+  m_NumRoundsToWin: 1
+  redBlurActivated: 1
